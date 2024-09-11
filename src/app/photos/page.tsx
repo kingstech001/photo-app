@@ -90,7 +90,7 @@ const Photos = () => {
   };
 
   useEffect(() => {
-    // fetchUser();
+    fetchUser();
     fetchPhotos();
   }, []);
 
