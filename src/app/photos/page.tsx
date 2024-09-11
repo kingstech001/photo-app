@@ -98,13 +98,13 @@ const Photos = () => {
     <div>
       {userName && <h1>Welcome, {userName}!</h1>}
       <input type="file" onChange={(e) => setFile(e.target.files?.[0] ?? null)} />
-      <button onClick={() => file && uploadPhoto(file)}>Upload</button>
+      <button onClick={() => file && uploadPhoto(file)} disabled={!file}>Upload</button>
 
       <div>
         <button onClick={startCapture}>Capture Photo</button>
         {capturing && <video ref={videoRef} style={{ width: '100%', height: 'auto' }} />}
         {photo && <img src={photo} alt="Captured" style={{ maxWidth: '100%', height: 'auto' }} />}
-        <button onClick={handleCapture}>Upload Capture</button>
+        {photo && <button onClick={handleCapture}>Upload Capture</button>}
       </div>
 
       <div>
