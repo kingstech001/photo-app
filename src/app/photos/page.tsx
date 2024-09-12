@@ -84,6 +84,7 @@ const Photos = () => {
       // Ensure the videoRef is still valid before trying to stop the stream
       if (videoRef.current && videoRef.current.srcObject) {
         const stream = videoRef.current.srcObject as MediaStream;
+        
 
         if (stream) {
           const tracks = stream.getTracks();
@@ -147,6 +148,25 @@ const Photos = () => {
     }
   };
 
+  // Function to delete a photo
+const deletePhoto = async (photoName: string) => {
+  // const { data: { user } } = await supabase.auth.getUser();
+  // if (!user) return; // Ensure user is logged in
+
+  // const userId = user.id;
+
+  const { error } = await supabase.storage
+    .from('photos')
+    .remove([`${photoName}`]);
+
+  if (error) {
+    console.error('Error deleting photo:', error.message);
+  } else {
+    console.log('Photo deleted successfully');
+    fetchPhotos(); // Refresh the list of photos
+  }
+};
+
   return (
     <div>
       {userName && <h1>Welcome, {userName}!</h1>}
@@ -181,10 +201,10 @@ const Photos = () => {
                 alt={photo.name}
                 width={400}
                 height={100}
-                className='h-[250px] object-cover'
+                className='h-[250px] object-cover rounded'
               />
               <div className='flex justify-end py-2 pr-2'>
-                <button><MdDelete className='text-orange-500 size-5' /></button>
+                <button onClick={() => deletePhoto(photo.name)}><MdDelete className='text-orange-500 size-5' /></button>
                 <button><MdFavorite className='text-orange-500 size-5' /></button>
               </div>
             </div>
