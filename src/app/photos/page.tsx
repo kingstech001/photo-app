@@ -17,11 +17,8 @@ interface Photo {
 
 const Photos = () => {
   const [photos, setPhotos] = useState<Photo[]>([]);
-  const [file, setFile] = useState<File | null>(null);
   const [userName, setUserName] = useState<string | null>(null);
   const [capturing, setCapturing] = useState<boolean>(false);
-  const [photo, setPhoto] = useState<string | null>(null); // Captured photo
-  const [capturedFile, setCapturedFile] = useState<File | null>(null); // File for the captured image
   const videoRef = useRef<HTMLVideoElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [startCapturing, setStartCapturing] = useState(false)
@@ -53,7 +50,7 @@ const Photos = () => {
     } else {
       console.log('File uploaded successfully');
       fetchPhotos();
-      setCapturedFile(null);
+      // setCapturedFile(null);
     }
   };
 
@@ -70,11 +67,9 @@ const Photos = () => {
       // Capture the image from the video stream and convert it to a data URL
       ctx.drawImage(videoRef.current, 0, 0);
       const dataUrl = canvas.toDataURL('image/png');
-      setPhoto(dataUrl); // Set the captured photo for display
 
       // Convert the data URL to a File object
       const fileToUpload = dataURLToFile(dataUrl, 'captured-photo.png');
-      setCapturedFile(fileToUpload); // Save the file for possible future use
 
       setCapturing(false); // Stop capturing mode
 
@@ -137,7 +132,6 @@ const Photos = () => {
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
     if (selectedFile) {
-      setFile(selectedFile);
       await uploadPhoto(selectedFile); // Automatically upload the file
     }
   };
@@ -190,11 +184,11 @@ const deletePhoto = async (photoName: string) => {
       </div>
 
       <div className="grid grid-cols-auto-fill min-w-[200px] max-w-[1146px] md:px-[32px] p-[24px] m-auto gap-[30px]">
-        {photos.map((photo) => {
+        {photos.map((photo,index) => {
           const { data } = supabase.storage.from('photos').getPublicUrl(photo.name);
           const publicUrl = data?.publicUrl;
           return (
-            <div className='shadow-lg p-[2px] rounded'>
+            <div className='shadow-lg p-[2px] rounded' key={photo.name || index}>
               <Image
                 key={photo.name} // use unique name or id
                 src={publicUrl || '/placeholder.png'} // use publicUrl

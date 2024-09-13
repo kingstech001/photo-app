@@ -19,7 +19,7 @@ const ConfirmEmail = () => {
         return;
       }
 
-      const { data, error } = await supabase.auth.verifyOtp({
+      const { error } = await supabase.auth.verifyOtp({
         type: 'signup',
         token,
         email: searchParams.get('email') || '', // Get email from URL query params
