@@ -22,7 +22,7 @@ const Photos = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [startCapturing, setStartCapturing] = useState(false)
-  const router = useRouter();
+  // const router = useRouter();
 
   const fetchUser = async () => {
     const { data: { user }, error } = await supabase.auth.getUser();
